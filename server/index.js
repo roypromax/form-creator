@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const connection = require("./configs/db");
+const formRouter = require("./routes/form.routes");
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -10,6 +11,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Form creator backend");
 });
+
+app.use("/form", formRouter);
 
 app.listen(port, async () => {
   try {
@@ -21,3 +24,4 @@ app.listen(port, async () => {
     console.log(error);
   }
 });
+8000;
