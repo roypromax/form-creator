@@ -38,7 +38,7 @@ const categorizeQuestionSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
-Form;
+
 const CategorizeQuestionModel = mongoose.model(
   "CategorizeQuestion",
   categorizeQuestionSchema
