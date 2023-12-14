@@ -1,13 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { backendURL } from "../configs/backendURL";
+import { useNavigate } from "react-router-dom";
 
 const AllForms = () => {
   const [forms, setForms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
-  console.log(forms);
+  // console.log(forms);
 
   const getForms = () => {
     setLoading(true);
@@ -64,8 +66,11 @@ const AllForms = () => {
             >
               <span className="text-lg">{form.title}</span>
               <div>
-                <button className="rounded p-1 text-white bg-green-600 mr-2">
-                  Edit
+                <button
+                  onClick={() => navigate(`/form-preview/${form._id}`)}
+                  className="rounded p-1 text-white bg-green-600 mr-2"
+                >
+                  Preview
                 </button>
                 <button
                   onClick={() => deleteForm(form._id)}
