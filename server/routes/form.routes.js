@@ -19,7 +19,31 @@ formRouter.get("/", async (req, res) => {
 //route to get a form by id
 formRouter.get("/:id", async (req, res) => {
   try {
-    const form = await FormModel.findById(req.params.id);
+    let form = await FormModel.findById(req.params.id);
+
+    form = form.toObject(); // Convert the form document to a plain JavaScript object
+
+    // Fetch the questions from the correct collections based on their types
+    for (let i = 0; i < form.questions.length; i++) {
+      let question;
+      if (form.questions[i].type === "categorize") {
+        question = await CategorizeQuestionModel.findById(form.questions[i].id);
+      } else if (form.questions[i].type === "cloze") {
+        question = await ClozeQuestionModel.findById(form.questions[i].id);
+      } else if (form.questions[i].type === "comprehension") {
+        question = await ComprehensionQuestionModel.findById(
+          form.questions[i].id
+        );
+      }
+
+      if (question) {
+        // Spread the properties of the fetched question into the question object
+        form.questions[i] = { ...form.questions[i], ...question.toObject() };
+        // Delete the 'id' property
+        delete form.questions[i].id;
+      }
+    }
+
     res.json(form);
   } catch (error) {
     res.status(500).json({ message: error.message });
